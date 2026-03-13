@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSTF Quiz - Updated Final</title>
+    <title>MSTF Quiz - Fixed Links Edition</title>
     <style>
         :root { --p: #007bff; --s: #28a745; --d: #dc3545; --w: #ffc107; --dk: #343a40; --lt: #f8f9fa; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #dee2e6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
@@ -25,7 +25,6 @@
 
     <div id="s-home" class="screen active">
         <h1 style="color:var(--p)">MSTF QUIZ</h1>
-        <p>نظام المسابقات السحابي</p>
         <button class="btn btn-p" onclick="initApp('display')">فتح شاشة العرض (كود جديد)</button>
         <button class="btn btn-dk" onclick="show('s-auth')">الدخول كـمتحكم (جوال)</button>
     </div>
@@ -107,7 +106,12 @@
             { img: "https://i.top4top.io/p_37243sf7m0.png", ans: "دومينوز" }, { img: "https://j.top4top.io/p_37247ytwt1.png", ans: "بوربوينت" },
             { img: "https://k.top4top.io/p_3724mej1x2.png", ans: "كرتون" }, { img: "https://l.top4top.io/p_3724apxgp3.png", ans: "بيج بيك" },
             { img: "https://a.top4top.io/p_37242cqd54.png", ans: "بوكس فايت" }, { img: "https://c.top4top.io/p_3724gldev6.png", ans: "مكتبة السعادة" },
-            { img: "https://e.top4top.io/p_37240ju7y8.png", ans: "فري فاير" }, { img: "https://f.top4top.io/p_37245sfun9.png", ans: "اوفر تايم" }
+            { img: "https://e.top4top.io/p_37240ju7y8.png", ans: "فري فاير" }, { img: "https://f.top4top.io/p_37245sfun9.png", ans: "اوفر تايم" },
+            // الأسئلة المحدثة بروابط توب فور توب الجديدة
+            { img: "https://i.top4top.io/p_3724symfm0.png", ans: "انشيلوتي" },
+            { img: "https://k.top4top.io/p_3724g26wr0.png", ans: "ديبروين" },
+            { img: "https://l.top4top.io/p_3724b7ixb1.png", ans: "توتنهام" },
+            { img: "https://a.top4top.io/p_3724tzbx12.png", ans: "بوشروان" }
         ];
 
         let curIdx = 0, p1 = 0, p2 = 0;
@@ -118,6 +122,7 @@
         };
 
         window.initApp = (mode) => {
+            // خلط الأسئلة عشوائياً عند البداية
             quizData.sort(() => Math.random() - 0.5);
 
             if(mode === 'display') {
