@@ -173,7 +173,21 @@
             { img: "https://l.top4top.io/p_3724iknjf5.png", ans: "فيران توريس" },
             { img: "https://a.top4top.io/p_3724qtv4t6.png", ans: "قرنفل" },
             { img: "https://i.top4top.io/p_3724iaz561.png", ans: "حجاب" },
-            { img: "https://h.top4top.io/p_3724otr080.png", ans: "خوباستي" }
+            { img: "https://h.top4top.io/p_3724otr080.png", ans: "خوباستي" },
+            { img: "https://g.top4top.io/p_3724abzp10.jpg", ans: "كتكوت" },
+            { img: "https://h.top4top.io/p_3724542d81.jpg", ans: "نيوم" },
+            { img: "https://i.top4top.io/p_3724668xo2.jpg", ans: "روسيا" },
+            { img: "https://j.top4top.io/p_3724horph3.jpg", ans: "برجوين" },
+            { img: "https://f.top4top.io/p_3724junfe0.png", ans: "بطانية" },
+            { img: "https://e.top4top.io/p_3724k4z4q1.png", ans: "ابل باي" },
+            { img: "https://f.top4top.io/p_3724ajxfb2.png", ans: "بور روب" },
+            { img: "https://g.top4top.io/p_37241ny3x3.png", ans: "توتنهام" },
+            { img: "https://h.top4top.io/p_3724jskop4.png", ans: "كوكوريا" },
+            { img: "https://i.top4top.io/p_3724recs95.png", ans: "توتي" },
+            { img: "", ans: "سام ٦ تايم" }, // لغز 7 يحتاج رابط
+            { img: "https://j.top4top.io/p_3724pwxa16.png", ans: "متجر" },
+            { img: "https://k.top4top.io/p_37244tplt7.png", ans: "جيجي بوفون" },
+            { img: "https://l.top4top.io/p_3724x9lf18.png", ans: "أليسون" }
         ];
 
         let idx = 0, p1 = 0, p2 = 0;
@@ -228,7 +242,7 @@
             if(idx < quizData.length) {
                 load();
             } else {
-                alert("انتهت جميع الأسئلة! سيتم إعادة الخلط لبدء جولة جديدة.");
+                alert("انتهت الجولة! سيتم إعادة الخلط لجولة جديدة.");
                 shuffleArray(quizData);
                 idx = 0;
                 load();
