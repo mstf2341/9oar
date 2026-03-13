@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSTF Quiz - Firebase System</title>
+    <title>MSTF Quiz - Final Secure Edition</title>
     <style>
         :root { --p: #007bff; --s: #28a745; --d: #dc3545; --w: #ffc107; --dk: #343a40; --lt: #f8f9fa; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #dee2e6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .screen { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 95%; max-width: 600px; display: none; }
+        .screen { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 95%; max-width: 600px; display: none; position: relative; }
         .active { display: block; }
         .btn { padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
         .btn-p { background: var(--p); color: white; }
@@ -17,54 +17,55 @@
         .img-box { width: 100%; border-radius: 15px; background: #eee; margin: 15px 0; overflow: hidden; border: 3px solid #ddd; min-height: 250px; }
         img { width: 100%; display: block; height: auto; }
         .ans-label { font-size: 2.2rem; color: var(--s); font-weight: bold; margin-top: 10px; background: #e9f7ef; padding: 10px; border-radius: 10px; display: none; }
-        .admin-controls { background: #fff3cd; padding: 15px; border-radius: 10px; border: 1px dashed #856404; }
-        .team-label { font-size: 1.2rem; font-weight: bold; color: var(--dk); margin-bottom: 5px; }
-        .name-input { width: 80%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; text-align: center; margin-bottom: 10px; font-size: 0.9rem; }
+        .sync-tag { position: absolute; top: 10px; right: 10px; background: #000; color: #fff; padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; }
+        input[type="text"] { width: 80px; padding: 5px; text-align: center; border-radius: 5px; border: 1px solid #ccc; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="s-home" class="screen active">
-        <h1 style="color:var(--p); margin-bottom:5px;">MSTF QUIZ</h1>
-        <p style="margin-top:0;">نظام التحكم المتطور</p>
-        <button class="btn btn-p" onclick="initApp('display')">فتح شاشة العرض (الجمهور)</button>
-        <button class="btn btn-dk" onclick="initApp('admin')">فتح لوحة التحكم (المقدم)</button>
+        <h1 style="color:var(--p)">MSTF QUIZ</h1>
+        <p>نظام التحكم العشوائي عبر السحاب</p>
+        <button class="btn btn-p" onclick="initApp('display')">فتح شاشة العرض (كود جديد)</button>
+        <button class="btn btn-dk" onclick="show('s-auth')">الدخول كـمتحكم (جوال)</button>
+    </div>
+
+    <div id="s-auth" class="screen">
+        <h2>أدخل كود الغرفة</h2>
+        <input type="number" id="roomInput" style="width:80%; padding:15px; text-align:center; font-size:1.5rem;" placeholder="00000">
+        <button class="btn btn-p" onclick="initApp('admin')">اتصال بالمسابقة</button>
+        <button class="btn" style="background:#6c757d; color:white;" onclick="show('s-home')">رجوع</button>
     </div>
 
     <div id="s-display" class="screen">
-        <div id="d-num" style="font-weight: bold; margin-bottom: 10px;">بانتظار البداية...</div>
+        <div class="sync-tag">كود الغرفة: <span id="displayCode">-----</span></div>
+        <div id="d-num" style="font-weight: bold; margin-bottom: 10px; margin-top: 20px;">بانتظار البداية...</div>
         <div class="score-box">
-            <div><div id="d-t1n" class="team-label">فريق 1</div><div id="d-p1" class="points">0</div></div>
-            <div><div id="d-t2n" class="team-label">فريق 2</div><div id="d-p2" class="points">0</div></div>
+            <div><div id="d-t1n" style="font-weight:bold;">فريق 1</div><div id="d-p1" class="points">0</div></div>
+            <div><div id="d-t2n" style="font-weight:bold;">فريق 2</div><div id="d-p2" class="points">0</div></div>
         </div>
         <div class="img-box"><img id="d-img" src=""></div>
         <div id="d-ans" class="ans-label"></div>
     </div>
 
     <div id="s-admin" class="screen">
-        <div class="admin-controls">
-            <div id="a-hint" style="font-weight:bold; color:#856404; font-size: 1.3rem; margin-bottom:10px;">الإجابة: ---</div>
-            <button class="btn btn-p" style="background:var(--w); color:black;" id="btnReveal">إظهار الإجابة للجمهور</button>
+        <div style="background:#fff3cd; padding:15px; border-radius:10px; border:1px dashed #856404;">
+            <div id="a-hint" style="font-weight:bold; font-size:1.3rem;">الإجابة: ---</div>
+            <button class="btn btn-p" style="background:var(--w); color:black;" id="btnReveal">إظهار الإجابة</button>
             <button class="btn btn-p" id="btnNext">اللغز التالي ➔</button>
         </div>
-        
-        <div class="score-box" style="margin-top:20px; flex-direction: column;">
-            <div style="display: flex; justify-content: space-around; width: 100%;">
-                <div style="width: 45%;">
-                    <input type="text" id="t1Name" class="name-input" placeholder="اسم الفريق 1" value="فريق 1">
-                    <br>
-                    <button class="btn" style="width:50px; font-size: 1.5rem;" id="p1Plus">+</button> 
-                    <button class="btn" style="width:50px; background:var(--d); color:white;" id="p1Minus">-</button>
-                </div>
-                <div style="width: 45%;">
-                    <input type="text" id="t2Name" class="name-input" placeholder="اسم الفريق 2" value="فريق 2">
-                    <br>
-                    <button class="btn" style="width:50px; font-size: 1.5rem;" id="p2Plus">+</button> 
-                    <button class="btn" style="width:50px; background:var(--d); color:white;" id="p2Minus">-</button>
-                </div>
+        <div class="score-box" style="margin-top:20px;">
+            <div>
+                <input type="text" id="t1Name" value="فريق 1"><br>
+                <button class="btn" style="width:50px;" id="p1Plus">+</button>
+                <button class="btn" style="width:50px; background:var(--d); color:white;" id="p1Minus">-</button>
+            </div>
+            <div>
+                <input type="text" id="t2Name" value="فريق 2"><br>
+                <button class="btn" style="width:50px;" id="p2Plus">+</button>
+                <button class="btn" style="width:50px; background:var(--d); color:white;" id="p2Minus">-</button>
             </div>
         </div>
-        <button class="btn" style="background:#6c757d; color:white; margin-top:20px;" onclick="location.reload()">إعادة ضبط المسابقة</button>
     </div>
 
     <script type="module">
@@ -84,7 +85,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        const quizRef = ref(db, 'mstf_live_quiz');
+        let roomCode, quizRef;
 
         const quizData = [
             { img: "https://j.top4top.io/p_3724dpbqn0.png", ans: "سمكري" }, { img: "https://k.top4top.io/p_3724jdw4d1.png", ans: "حلزون" },
@@ -114,10 +115,20 @@
 
         let curIdx = 0, p1 = 0, p2 = 0;
 
-        window.initApp = function(mode) {
-            document.getElementById('s-home').style.display = 'none';
+        window.show = (id) => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        };
+
+        window.initApp = (mode) => {
+            // تفعيل خاصية العشوائية عند البدء
+            quizData.sort(() => Math.random() - 0.5);
+
             if(mode === 'display') {
-                document.getElementById('s-display').classList.add('active');
+                roomCode = Math.floor(10000 + Math.random() * 90000).toString();
+                quizRef = ref(db, 'mstf_rooms/' + roomCode);
+                document.getElementById('displayCode').innerText = roomCode;
+                show('s-display');
                 onValue(quizRef, (snap) => {
                     const data = snap.val();
                     if(data) {
@@ -132,15 +143,17 @@
                     }
                 });
             } else {
-                document.getElementById('s-admin').classList.add('active');
+                roomCode = document.getElementById('roomInput').value;
+                if(!roomCode) return alert("أدخل كود الغرفة");
+                quizRef = ref(db, 'mstf_rooms/' + roomCode);
+                show('s-admin');
                 sync(true);
             }
         };
 
         function sync(resetReveal = false) {
             update(quizRef, {
-                img: quizData[curIdx].img,
-                ans: quizData[curIdx].ans,
+                img: quizData[curIdx].img, ans: quizData[curIdx].ans,
                 p1: p1, p2: p2, idx: curIdx,
                 t1n: document.getElementById('t1Name').value,
                 t2n: document.getElementById('t2Name').value,
@@ -149,14 +162,14 @@
             document.getElementById('a-hint').innerText = "الإجابة: " + quizData[curIdx].ans;
         }
 
-        document.getElementById('t1Name').oninput = () => sync();
-        document.getElementById('t2Name').oninput = () => sync();
         document.getElementById('btnReveal').onclick = () => update(quizRef, { reveal: true });
-        document.getElementById('btnNext').onclick = () => { if(curIdx < quizData.length-1) { curIdx++; sync(true); } };
+        document.getElementById('btnNext').onclick = () => { if(curIdx < quizData.length-1) { curIdx++; sync(true); } else { alert("انتهت الأسئلة!"); } };
         document.getElementById('p1Plus').onclick = () => { p1++; sync(); };
         document.getElementById('p1Minus').onclick = () => { if(p1>0) p1--; sync(); };
         document.getElementById('p2Plus').onclick = () => { p2++; sync(); };
         document.getElementById('p2Minus').onclick = () => { if(p2>0) p2--; sync(); };
+        document.getElementById('t1Name').oninput = () => sync();
+        document.getElementById('t2Name').oninput = () => sync();
     </script>
 </body>
 </html>
