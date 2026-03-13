@@ -3,198 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي الصور MSTF</title>
+    <title>MSTF Pro Quiz System</title>
     <style>
         :root {
-            --primary: #007bff;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --dark: #343a40;
-            --light: #f8f9fa;
+            --primary: #007bff; --success: #28a745; --danger: #dc3545;
+            --warning: #ffc107; --dark: #343a40; --light: #f8f9fa;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #dee2e6;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #dee2e6; margin: 0;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
         .screen {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            text-align: center;
-            width: 95%;
-            max-width: 500px;
-            display: none;
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: center;
+            width: 95%; max-width: 600px; display: none; position: relative;
         }
         .active { display: block; }
-        .brand { margin-bottom: 20px; }
-        .brand h1 { margin: 0; color: var(--primary); font-size: 2.5rem; }
-        .brand p { margin: 0; font-weight: bold; color: var(--dark); }
-        input {
-            width: 85%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 1rem;
-        }
+        .brand h1 { margin: 0; color: var(--primary); font-size: 3rem; }
+        .mode-select { display: flex; gap: 15px; margin-top: 20px; }
         button {
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.2s;
+            padding: 15px; border: none; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            width: 100%; margin-top: 10px; transition: 0.3s;
         }
-        .btn-main { background-color: var(--primary); color: white; }
-        .btn-reveal { background-color: var(--warning); color: #000; }
-        .btn-next { background-color: var(--dark); color: white; }
+        .btn-main { background: var(--primary); color: white; }
+        .btn-ctrl { background: var(--dark); color: white; }
+        .btn-plus { background: var(--success); color: white; width: 45px; }
+        .btn-minus { background: var(--danger); color: white; width: 45px; }
+        
         .scoreboard {
-            display: flex;
-            justify-content: space-around;
-            background: var(--light);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            display: flex; justify-content: space-around;
+            background: var(--light); padding: 15px; border-radius: 15px; margin-bottom: 15px;
         }
-        .score { font-size: 1.8rem; font-weight: bold; color: var(--primary); margin: 5px 0; }
-        .points-controls { display: flex; gap: 5px; justify-content: center; }
-        .btn-pt {
-            padding: 5px 12px;
-            width: auto;
-            font-size: 1rem;
-            margin-top: 0;
-        }
-        .btn-plus { background: var(--success); color: white; }
-        .btn-minus { background: var(--danger); color: white; }
+        .score { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
         .img-box {
-            width: 100%;
-            border-radius: 15px;
-            border: 2px solid #eee;
-            margin: 15px 0;
-            min-height: 200px;
-            overflow: hidden;
-            background-color: #f0f0f0;
+            width: 100%; border-radius: 15px; border: 3px solid #eee;
+            margin: 15px 0; background: #f0f0f0; overflow: hidden;
         }
-        img { width: 100%; display: block; height: auto; }
-        .answer-label {
-            background: #d1e7dd;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            display: none;
-            margin-bottom: 10px;
-            color: #0f5132;
-            font-size: 1.4rem;
+        img { width: 100%; height: auto; display: block; }
+
+        .admin-panel { background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 10px; border: 1px dashed #856404; }
+        .ans-text { font-size: 1.5rem; color: #0f5132; font-weight: bold; margin-bottom: 10px; }
+        .setup-input { width: 80%; padding: 12px; margin: 10px; border-radius: 8px; border: 2px solid #ddd; text-align: center; font-size: 1.2rem; }
+        
+        /* كود الدخول الظاهر على الشاشة */
+        .sync-code {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--dark); color: white; padding: 5px 10px;
+            border-radius: 8px; font-size: 0.8rem; font-weight: bold;
         }
-        .counter { font-size: 0.9rem; color: #666; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
     <div id="s-home" class="screen active">
-        <div class="brand">
-            <h1>MSTF</h1>
-            <p>تحدي الصور</p>
+        <div class="brand"><h1>MSTF</h1><p>نظام المسابقات المطور</p></div>
+        <div class="mode-select">
+            <button class="btn-main" onclick="initDisplay()">فتح الشاشة الرئيسية</button>
+            <button class="btn-ctrl" onclick="show('s-auth')">فتح وحدة التحكم</button>
         </div>
-        <button class="btn-main" onclick="show('s-setup')">ابدأ المسابقة</button>
     </div>
 
-    <div id="s-setup" class="screen">
-        <h2>تجهيز الفرق</h2>
-        <input type="text" id="t1In" placeholder="اسم الفريق الأول">
-        <input type="text" id="t2In" placeholder="اسم الفريق الثاني">
-        <button class="btn-main" onclick="start()">دخول التحدي</button>
+    <div id="s-auth" class="screen">
+        <h2>أدخل كود المزامنة</h2>
+        <p>الكود يظهر في زاوية الشاشة الرئيسية</p>
+        <input type="number" id="inputSyncCode" class="setup-input" placeholder="00000">
+        <button class="btn-main" onclick="verifyAndStart()">ربط وتحكم</button>
+        <button onclick="show('s-home')">رجوع</button>
     </div>
 
-    <div id="s-game" class="screen">
-        <div class="counter" id="qCounter">اللغز 1</div>
+    <div id="s-display" class="screen">
+        <div class="sync-code">كود الربط: <span id="displaySyncCode">-----</span></div>
+        <div class="counter" id="d-counter">انتظار المقدم...</div>
         <div class="scoreboard">
-            <div class="team">
-                <div id="t1N">الفريق 1</div>
-                <div id="t1S" class="score">0</div>
+            <div><div>فريق 1</div><div id="d-p1" class="score">0</div></div>
+            <div><div>فريق 2</div><div id="d-p2" class="score">0</div></div>
+        </div>
+        <div class="img-box"><img id="d-img" src="" alt=""></div>
+        <div id="d-ans" style="display:none; font-size: 2rem; color: var(--success); font-weight: bold; margin-top: 10px;"></div>
+    </div>
+
+    <div id="s-admin" class="screen">
+        <div class="admin-panel">
+            <p>لغز رقم: <span id="a-idx">1</span></p>
+            <div class="ans-text">الإجابة: <span id="a-ans">---</span></div>
+            <button class="btn-main" style="background:var(--warning); color:black;" onclick="sendCmd('reveal')">إظهار الإجابة للجمهور</button>
+            <button class="btn-main" onclick="next()">اللغز التالي ➔</button>
+        </div>
+        
+        <div class="scoreboard" style="margin-top:20px;">
+            <div>
+                <span>فريق 1</span>
                 <div class="points-controls">
-                    <button class="btn-pt btn-plus" onclick="updateScore(1, 1)">+</button>
-                    <button class="btn-pt btn-minus" onclick="updateScore(1, -1)">-</button>
+                    <button class="btn-plus" onclick="modPoint(1,1)">+</button>
+                    <button class="btn-minus" onclick="modPoint(1,-1)">-</button>
                 </div>
             </div>
-            <div class="team">
-                <div id="t2N">الفريق 2</div>
-                <div id="t2S" class="score">0</div>
+            <div>
+                <span>فريق 2</span>
                 <div class="points-controls">
-                    <button class="btn-pt btn-plus" onclick="updateScore(2, 1)">+</button>
-                    <button class="btn-pt btn-minus" onclick="updateScore(2, -1)">-</button>
+                    <button class="btn-plus" onclick="modPoint(2,1)">+</button>
+                    <button class="btn-minus" onclick="modPoint(2,-1)">-</button>
                 </div>
             </div>
         </div>
-
-        <div class="img-box">
-            <img id="currImg" src="" alt="جاري تحميل اللغز...">
-        </div>
-
-        <div id="ansLab" class="answer-label"></div>
-
-        <button class="btn-reveal" onclick="reveal()">كشف الإجابة</button>
-        <button class="btn-next" onclick="next()">اللغز التالي ←</button>
     </div>
 
     <script>
-        let quizData = [
-            { img: "https://j.top4top.io/p_3724dpbqn0.png", ans: "سمكري" },
-            { img: "https://k.top4top.io/p_3724jdw4d1.png", ans: "حلزون" },
-            { img: "https://l.top4top.io/p_3724luagk2.png", ans: "ارجنتين" },
-            { img: "https://a.top4top.io/p_3724ohvq03.png", ans: "شرطي" },
-            { img: "https://c.top4top.io/p_3724sp59t5.png", ans: "سلاحف النينجا" },
-            { img: "https://l.top4top.io/p_3724uig9h8.png", ans: "خوسانوف" },
-            { img: "https://k.top4top.io/p_372471ld67.png", ans: "رأس تنورة" },
-            { img: "https://j.top4top.io/p_3724ye0666.png", ans: "بارنيز" },
-            { img: "https://i.top4top.io/p_37249olqk5.png", ans: "ابن تيمية" },
-            { img: "https://h.top4top.io/p_3724kdth24.png", ans: "عمر ابن الخطاب" },
-            { img: "https://g.top4top.io/p_3724d3fs63.png", ans: "بوشروان" },
-            { img: "https://f.top4top.io/p_3724mi6r22.png", ans: "سمبدوريا" },
-            { img: "https://e.top4top.io/p_3724klyfy1.png", ans: "ريال مدريد" },
-            { img: "https://g.top4top.io/p_37241orcq0.png", ans: "ديبروين" },
-            { img: "https://a.top4top.io/p_3724y6b4z0.png", ans: "سلمون" },
-            { img: "https://g.top4top.io/p_3724vps3t0.png", ans: "أنشيلوتي" },
-            { img: "https://h.top4top.io/p_3724blapi1.png", ans: "كيلوباترا" },
-            { img: "https://i.top4top.io/p_3724h40s32.png", ans: "نايكي" },
-            { img: "https://j.top4top.io/p_3724ochzp3.png", ans: "ون بيس" },
-            { img: "https://k.top4top.io/p_3724pc0v04.png", ans: "محمد نور" },
-            { img: "https://l.top4top.io/p_3724iknjf5.png", ans: "فيران توريس" },
-            { img: "https://a.top4top.io/p_3724qtv4t6.png", ans: "قرنفل" },
-            { img: "https://i.top4top.io/p_3724iaz561.png", ans: "حجاب" },
-            { img: "https://h.top4top.io/p_3724otr080.png", ans: "خوباستي" },
-            { img: "https://g.top4top.io/p_3724abzp10.jpg", ans: "كتكوت" },
-            { img: "https://h.top4top.io/p_3724542d81.jpg", ans: "نيوم" },
-            { img: "https://i.top4top.io/p_3724668xo2.jpg", ans: "روسيا" },
-            { img: "https://j.top4top.io/p_3724horph3.jpg", ans: "برجوين" },
-            { img: "https://f.top4top.io/p_3724junfe0.png", ans: "بطانية" },
-            { img: "https://e.top4top.io/p_3724k4z4q1.png", ans: "ابل باي" },
-            { img: "https://f.top4top.io/p_3724ajxfb2.png", ans: "بور روب" },
-            { img: "https://g.top4top.io/p_37241ny3x3.png", ans: "توتنهام" },
-            { img: "https://h.top4top.io/p_3724jskop4.png", ans: "كوكوريا" },
-            { img: "https://i.top4top.io/p_3724recs95.png", ans: "توتي" },
-            { img: "", ans: "سام ٦ تايم" }, // لغز 7 يحتاج رابط
-            { img: "https://j.top4top.io/p_3724pwxa16.png", ans: "متجر" },
-            { img: "https://k.top4top.io/p_37244tplt7.png", ans: "جيجي بوفون" },
-            { img: "https://l.top4top.io/p_3724x9lf18.png", ans: "أليسون" }
+        const quizData = [
+            { img: "https://j.top4top.io/p_3724dpbqn0.png", ans: "سمكري" }, { img: "https://k.top4top.io/p_3724jdw4d1.png", ans: "حلزون" },
+            { img: "https://l.top4top.io/p_3724luagk2.png", ans: "ارجنتين" }, { img: "https://a.top4top.io/p_3724ohvq03.png", ans: "شرطي" },
+            { img: "https://c.top4top.io/p_3724sp59t5.png", ans: "سلاحف النينجا" }, { img: "https://l.top4top.io/p_3724uig9h8.png", ans: "خوسانوف" },
+            { img: "https://k.top4top.io/p_372471ld67.png", ans: "رأس تنورة" }, { img: "https://j.top4top.io/p_3724ye0666.png", ans: "بارنيز" },
+            { img: "https://i.top4top.io/p_37249olqk5.png", ans: "ابن تيمية" }, { img: "https://h.top4top.io/p_3724kdth24.png", ans: "عمر ابن الخطاب" },
+            { img: "https://g.top4top.io/p_3724d3fs63.png", ans: "بوشروان" }, { img: "https://f.top4top.io/p_3724mi6r22.png", ans: "سمبدوريا" },
+            { img: "https://e.top4top.io/p_3724klyfy1.png", ans: "ريال مدريد" }, { img: "https://g.top4top.io/p_37241orcq0.png", ans: "ديبروين" },
+            { img: "https://a.top4top.io/p_3724y6b4z0.png", ans: "سلمون" }, { img: "https://g.top4top.io/p_3724vps3t0.png", ans: "أنشيلوتي" },
+            { img: "https://h.top4top.io/p_3724blapi1.png", ans: "كيلوباترا" }, { img: "https://i.top4top.io/p_3724h40s32.png", ans: "نايكي" },
+            { img: "https://j.top4top.io/p_3724ochzp3.png", ans: "ون بيس" }, { img: "https://k.top4top.io/p_3724pc0v04.png", ans: "محمد نور" },
+            { img: "https://l.top4top.io/p_3724iknjf5.png", ans: "فيران توريس" }, { img: "https://a.top4top.io/p_3724qtv4t6.png", ans: "قرنفل" },
+            { img: "https://i.top4top.io/p_3724iaz561.png", ans: "حجاب" }, { img: "https://h.top4top.io/p_3724otr080.png", ans: "خوباستي" },
+            { img: "https://g.top4top.io/p_3724abzp10.jpg", ans: "كتكوت" }, { img: "https://h.top4top.io/p_3724542d81.jpg", ans: "نيوم" },
+            { img: "https://i.top4top.io/p_3724668xo2.jpg", ans: "روسيا" }, { img: "https://j.top4top.io/p_3724horph3.jpg", ans: "برجوين" },
+            { img: "https://f.top4top.io/p_3724junfe0.png", ans: "بطانية" }, { img: "https://e.top4top.io/p_3724k4z4q1.png", ans: "ابل باي" },
+            { img: "https://f.top4top.io/p_3724ajxfb2.png", ans: "بور روب" }, { img: "https://g.top4top.io/p_37241ny3x3.png", ans: "توتنهام" },
+            { img: "https://h.top4top.io/p_3724jskop4.png", ans: "كوكوريا" }, { img: "https://i.top4top.io/p_3724recs95.png", ans: "توتي" },
+            { img: "https://j.top4top.io/p_3724pwxa16.png", ans: "متجر" }, { img: "https://k.top4top.io/p_37244tplt7.png", ans: "جيجي بوفون" },
+            { img: "https://l.top4top.io/p_3724x9lf18.png", ans: "أليسون" }, { img: "https://i.top4top.io/p_37243sf7m0.png", ans: "دومينوز" },
+            { img: "https://j.top4top.io/p_37247ytwt1.png", ans: "بوربوينت" }, { img: "https://k.top4top.io/p_3724mej1x2.png", ans: "كرتون" },
+            { img: "https://l.top4top.io/p_3724apxgp3.png", ans: "بيج بيك" }, { img: "https://a.top4top.io/p_37242cqd54.png", ans: "بوكس فايت" },
+            { img: "https://c.top4top.io/p_3724gldev6.png", ans: "مكتبة السعادة" }, { img: "https://e.top4top.io/p_37240ju7y8.png", ans: "فري فاير" },
+            { img: "https://f.top4top.io/p_37245sfun9.png", ans: "اوفر تايم" }
         ];
 
+        const bc = new BroadcastChannel('mstf_channel');
         let idx = 0, p1 = 0, p2 = 0;
+        let sessionCode = "";
 
         function show(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+        }
+
+        // تشغيل الشاشة الرئيسية وتوليد كود
+        function initDisplay() {
+            sessionCode = Math.floor(10000 + Math.random() * 90000).toString(); // كود من 5 أرقام
+            localStorage.setItem('mstf_active_code', sessionCode);
+            document.getElementById('displaySyncCode').innerText = sessionCode;
+            show('s-display');
+            
+            bc.onmessage = (e) => {
+                const d = e.data;
+                if(d.type === 'update') {
+                    document.getElementById('d-img').src = d.img;
+                    document.getElementById('d-p1').innerText = d.p1;
+                    document.getElementById('d-p2').innerText = d.p2;
+                    document.getElementById('d-counter').innerText = `اللغز ${d.idx + 1}`;
+                    document.getElementById('d-ans').style.display = 'none';
+                }
+                if(d.type === 'reveal') {
+                    document.getElementById('d-ans').innerText = d.ans;
+                    document.getElementById('d-ans').style.display = 'block';
+                }
+            };
+        }
+
+        // التحقق من الكود المدخل في التحكم
+        function verifyAndStart() {
+            const entered = document.getElementById('inputSyncCode').value;
+            const active = localStorage.getItem('mstf_active_code');
+            
+            if(entered === active && active !== null) {
+                show('s-admin');
+                shuffleArray(quizData);
+                updateAdminUI();
+            } else {
+                alert("الكود غير صحيح أو الشاشة غير مفتوحة!");
+            }
         }
 
         function shuffleArray(array) {
@@ -204,49 +190,30 @@
             }
         }
 
-        function start() {
-            document.getElementById('t1N').innerText = document.getElementById('t1In').value || "الفريق 1";
-            document.getElementById('t2N').innerText = document.getElementById('t2In').value || "الفريق 2";
-            shuffleArray(quizData);
-            idx = 0;
-            load();
-            show('s-game');
+        function updateAdminUI() {
+            document.getElementById('a-idx').innerText = idx + 1;
+            document.getElementById('a-ans').innerText = quizData[idx].ans;
+            sendCmd('update');
         }
 
-        function load() {
-            document.getElementById('qCounter').innerText = `اللغز ${idx + 1} من ${quizData.length}`;
-            document.getElementById('currImg').src = quizData[idx].img;
-            document.getElementById('ansLab').innerText = quizData[idx].ans;
-            document.getElementById('ansLab').style.display = 'none';
+        function sendCmd(type) {
+            bc.postMessage({
+                type: type,
+                img: quizData[idx].img,
+                ans: quizData[idx].ans,
+                p1: p1, p2: p2, idx: idx
+            });
         }
 
-        function reveal() { 
-            document.getElementById('ansLab').style.display = 'block'; 
-        }
-
-        function updateScore(team, val) {
-            if(team === 1) { 
-                p1 += val; 
-                if(p1 < 0) p1 = 0;
-                document.getElementById('t1S').innerText = p1; 
-            }
-            else { 
-                p2 += val; 
-                if(p2 < 0) p2 = 0;
-                document.getElementById('t2S').innerText = p2; 
-            }
+        function modPoint(t, v) {
+            if(t===1) p1 = Math.max(0, p1+v); else p2 = Math.max(0, p2+v);
+            sendCmd('update');
         }
 
         function next() {
             idx++;
-            if(idx < quizData.length) {
-                load();
-            } else {
-                alert("انتهت الجولة! سيتم إعادة الخلط لجولة جديدة.");
-                shuffleArray(quizData);
-                idx = 0;
-                load();
-            }
+            if(idx < quizData.length) updateAdminUI();
+            else alert("انتهت جميع الأسئلة!");
         }
     </script>
 </body>
