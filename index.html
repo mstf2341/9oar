@@ -171,7 +171,9 @@
             { img: "https://j.top4top.io/p_3724ochzp3.png", ans: "ون بيس" },
             { img: "https://k.top4top.io/p_3724pc0v04.png", ans: "محمد نور" },
             { img: "https://l.top4top.io/p_3724iknjf5.png", ans: "فيران توريس" },
-            { img: "https://a.top4top.io/p_3724qtv4t6.png", ans: "قرنفل" }
+            { img: "https://a.top4top.io/p_3724qtv4t6.png", ans: "قرنفل" },
+            { img: "https://i.top4top.io/p_3724iaz561.png", ans: "حجاب" },
+            { img: "https://h.top4top.io/p_3724otr080.png", ans: "خوباستي" }
         ];
 
         let idx = 0, p1 = 0, p2 = 0;
@@ -226,7 +228,7 @@
             if(idx < quizData.length) {
                 load();
             } else {
-                alert("انتهت الجولة! سيتم إعادة الخلط لبدء تحدي جديد.");
+                alert("انتهت جميع الأسئلة! سيتم إعادة الخلط لبدء جولة جديدة.");
                 shuffleArray(quizData);
                 idx = 0;
                 load();
