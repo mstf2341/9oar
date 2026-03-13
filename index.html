@@ -3,114 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSTF Pro Quiz System</title>
+    <title>MSTF Quiz - Firebase System</title>
     <style>
-        :root {
-            --primary: #007bff; --success: #28a745; --danger: #dc3545;
-            --warning: #ffc107; --dark: #343a40; --light: #f8f9fa;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background-color: #dee2e6; margin: 0;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-        }
-        .screen {
-            background: white; padding: 25px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: center;
-            width: 95%; max-width: 600px; display: none; position: relative;
-        }
+        :root { --p: #007bff; --s: #28a745; --d: #dc3545; --w: #ffc107; --dk: #343a40; --lt: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #dee2e6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .screen { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 95%; max-width: 600px; display: none; }
         .active { display: block; }
-        .brand h1 { margin: 0; color: var(--primary); font-size: 3rem; }
-        .mode-select { display: flex; gap: 15px; margin-top: 20px; }
-        button {
-            padding: 15px; border: none; border-radius: 12px;
-            font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            width: 100%; margin-top: 10px; transition: 0.3s;
-        }
-        .btn-main { background: var(--primary); color: white; }
-        .btn-ctrl { background: var(--dark); color: white; }
-        .btn-plus { background: var(--success); color: white; width: 45px; }
-        .btn-minus { background: var(--danger); color: white; width: 45px; }
-        
-        .scoreboard {
-            display: flex; justify-content: space-around;
-            background: var(--light); padding: 15px; border-radius: 15px; margin-bottom: 15px;
-        }
-        .score { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
-        .img-box {
-            width: 100%; border-radius: 15px; border: 3px solid #eee;
-            margin: 15px 0; background: #f0f0f0; overflow: hidden;
-        }
-        img { width: 100%; height: auto; display: block; }
-
-        .admin-panel { background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 10px; border: 1px dashed #856404; }
-        .ans-text { font-size: 1.5rem; color: #0f5132; font-weight: bold; margin-bottom: 10px; }
-        .setup-input { width: 80%; padding: 12px; margin: 10px; border-radius: 8px; border: 2px solid #ddd; text-align: center; font-size: 1.2rem; }
-        
-        /* كود الدخول الظاهر على الشاشة */
-        .sync-code {
-            position: absolute; top: 10px; right: 10px;
-            background: var(--dark); color: white; padding: 5px 10px;
-            border-radius: 8px; font-size: 0.8rem; font-weight: bold;
-        }
+        .btn { padding: 15px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
+        .btn-p { background: var(--p); color: white; }
+        .btn-dk { background: var(--dk); color: white; }
+        .score-box { display: flex; justify-content: space-around; background: var(--lt); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid #ddd; }
+        .points { font-size: 2.8rem; font-weight: bold; color: var(--p); }
+        .img-box { width: 100%; border-radius: 15px; background: #eee; margin: 15px 0; overflow: hidden; border: 3px solid #ddd; min-height: 250px; }
+        img { width: 100%; display: block; height: auto; }
+        .ans-label { font-size: 2.2rem; color: var(--s); font-weight: bold; margin-top: 10px; background: #e9f7ef; padding: 10px; border-radius: 10px; display: none; }
+        .admin-controls { background: #fff3cd; padding: 15px; border-radius: 10px; border: 1px dashed #856404; }
+        .team-label { font-size: 1.2rem; font-weight: bold; color: var(--dk); margin-bottom: 5px; }
+        .name-input { width: 80%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; text-align: center; margin-bottom: 10px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <div id="s-home" class="screen active">
-        <div class="brand"><h1>MSTF</h1><p>نظام المسابقات المطور</p></div>
-        <div class="mode-select">
-            <button class="btn-main" onclick="initDisplay()">فتح الشاشة الرئيسية</button>
-            <button class="btn-ctrl" onclick="show('s-auth')">فتح وحدة التحكم</button>
-        </div>
-    </div>
-
-    <div id="s-auth" class="screen">
-        <h2>أدخل كود المزامنة</h2>
-        <p>الكود يظهر في زاوية الشاشة الرئيسية</p>
-        <input type="number" id="inputSyncCode" class="setup-input" placeholder="00000">
-        <button class="btn-main" onclick="verifyAndStart()">ربط وتحكم</button>
-        <button onclick="show('s-home')">رجوع</button>
+        <h1 style="color:var(--p); margin-bottom:5px;">MSTF QUIZ</h1>
+        <p style="margin-top:0;">نظام التحكم المتطور</p>
+        <button class="btn btn-p" onclick="initApp('display')">فتح شاشة العرض (الجمهور)</button>
+        <button class="btn btn-dk" onclick="initApp('admin')">فتح لوحة التحكم (المقدم)</button>
     </div>
 
     <div id="s-display" class="screen">
-        <div class="sync-code">كود الربط: <span id="displaySyncCode">-----</span></div>
-        <div class="counter" id="d-counter">انتظار المقدم...</div>
-        <div class="scoreboard">
-            <div><div>فريق 1</div><div id="d-p1" class="score">0</div></div>
-            <div><div>فريق 2</div><div id="d-p2" class="score">0</div></div>
+        <div id="d-num" style="font-weight: bold; margin-bottom: 10px;">بانتظار البداية...</div>
+        <div class="score-box">
+            <div><div id="d-t1n" class="team-label">فريق 1</div><div id="d-p1" class="points">0</div></div>
+            <div><div id="d-t2n" class="team-label">فريق 2</div><div id="d-p2" class="points">0</div></div>
         </div>
-        <div class="img-box"><img id="d-img" src="" alt=""></div>
-        <div id="d-ans" style="display:none; font-size: 2rem; color: var(--success); font-weight: bold; margin-top: 10px;"></div>
+        <div class="img-box"><img id="d-img" src=""></div>
+        <div id="d-ans" class="ans-label"></div>
     </div>
 
     <div id="s-admin" class="screen">
-        <div class="admin-panel">
-            <p>لغز رقم: <span id="a-idx">1</span></p>
-            <div class="ans-text">الإجابة: <span id="a-ans">---</span></div>
-            <button class="btn-main" style="background:var(--warning); color:black;" onclick="sendCmd('reveal')">إظهار الإجابة للجمهور</button>
-            <button class="btn-main" onclick="next()">اللغز التالي ➔</button>
+        <div class="admin-controls">
+            <div id="a-hint" style="font-weight:bold; color:#856404; font-size: 1.3rem; margin-bottom:10px;">الإجابة: ---</div>
+            <button class="btn btn-p" style="background:var(--w); color:black;" id="btnReveal">إظهار الإجابة للجمهور</button>
+            <button class="btn btn-p" id="btnNext">اللغز التالي ➔</button>
         </div>
         
-        <div class="scoreboard" style="margin-top:20px;">
-            <div>
-                <span>فريق 1</span>
-                <div class="points-controls">
-                    <button class="btn-plus" onclick="modPoint(1,1)">+</button>
-                    <button class="btn-minus" onclick="modPoint(1,-1)">-</button>
+        <div class="score-box" style="margin-top:20px; flex-direction: column;">
+            <div style="display: flex; justify-content: space-around; width: 100%;">
+                <div style="width: 45%;">
+                    <input type="text" id="t1Name" class="name-input" placeholder="اسم الفريق 1" value="فريق 1">
+                    <br>
+                    <button class="btn" style="width:50px; font-size: 1.5rem;" id="p1Plus">+</button> 
+                    <button class="btn" style="width:50px; background:var(--d); color:white;" id="p1Minus">-</button>
                 </div>
-            </div>
-            <div>
-                <span>فريق 2</span>
-                <div class="points-controls">
-                    <button class="btn-plus" onclick="modPoint(2,1)">+</button>
-                    <button class="btn-minus" onclick="modPoint(2,-1)">-</button>
+                <div style="width: 45%;">
+                    <input type="text" id="t2Name" class="name-input" placeholder="اسم الفريق 2" value="فريق 2">
+                    <br>
+                    <button class="btn" style="width:50px; font-size: 1.5rem;" id="p2Plus">+</button> 
+                    <button class="btn" style="width:50px; background:var(--d); color:white;" id="p2Minus">-</button>
                 </div>
             </div>
         </div>
+        <button class="btn" style="background:#6c757d; color:white; margin-top:20px;" onclick="location.reload()">إعادة ضبط المسابقة</button>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpYA8LMYe-8EnUCB5_p1zYPicK2jfBuuk",
+            authDomain: "sarzix-dots.firebaseapp.com",
+            databaseURL: "https://sarzix-dots-default-rtdb.firebaseio.com",
+            projectId: "sarzix-dots",
+            storageBucket: "sarzix-dots.firebasestorage.app",
+            messagingSenderId: "955409618557",
+            appId: "1:955409618557:web:a6603680639d1cdff48314",
+            measurementId: "G-QF9EJ1RQ2K"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const quizRef = ref(db, 'mstf_live_quiz');
+
         const quizData = [
             { img: "https://j.top4top.io/p_3724dpbqn0.png", ans: "سمكري" }, { img: "https://k.top4top.io/p_3724jdw4d1.png", ans: "حلزون" },
             { img: "https://l.top4top.io/p_3724luagk2.png", ans: "ارجنتين" }, { img: "https://a.top4top.io/p_3724ohvq03.png", ans: "شرطي" },
@@ -137,84 +112,51 @@
             { img: "https://f.top4top.io/p_37245sfun9.png", ans: "اوفر تايم" }
         ];
 
-        const bc = new BroadcastChannel('mstf_channel');
-        let idx = 0, p1 = 0, p2 = 0;
-        let sessionCode = "";
+        let curIdx = 0, p1 = 0, p2 = 0;
 
-        function show(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        // تشغيل الشاشة الرئيسية وتوليد كود
-        function initDisplay() {
-            sessionCode = Math.floor(10000 + Math.random() * 90000).toString(); // كود من 5 أرقام
-            localStorage.setItem('mstf_active_code', sessionCode);
-            document.getElementById('displaySyncCode').innerText = sessionCode;
-            show('s-display');
-            
-            bc.onmessage = (e) => {
-                const d = e.data;
-                if(d.type === 'update') {
-                    document.getElementById('d-img').src = d.img;
-                    document.getElementById('d-p1').innerText = d.p1;
-                    document.getElementById('d-p2').innerText = d.p2;
-                    document.getElementById('d-counter').innerText = `اللغز ${d.idx + 1}`;
-                    document.getElementById('d-ans').style.display = 'none';
-                }
-                if(d.type === 'reveal') {
-                    document.getElementById('d-ans').innerText = d.ans;
-                    document.getElementById('d-ans').style.display = 'block';
-                }
-            };
-        }
-
-        // التحقق من الكود المدخل في التحكم
-        function verifyAndStart() {
-            const entered = document.getElementById('inputSyncCode').value;
-            const active = localStorage.getItem('mstf_active_code');
-            
-            if(entered === active && active !== null) {
-                show('s-admin');
-                shuffleArray(quizData);
-                updateAdminUI();
+        window.initApp = function(mode) {
+            document.getElementById('s-home').style.display = 'none';
+            if(mode === 'display') {
+                document.getElementById('s-display').classList.add('active');
+                onValue(quizRef, (snap) => {
+                    const data = snap.val();
+                    if(data) {
+                        document.getElementById('d-img').src = data.img;
+                        document.getElementById('d-p1').innerText = data.p1;
+                        document.getElementById('d-p2').innerText = data.p2;
+                        document.getElementById('d-t1n').innerText = data.t1n || "فريق 1";
+                        document.getElementById('d-t2n').innerText = data.t2n || "فريق 2";
+                        document.getElementById('d-num').innerText = "اللغز رقم " + (data.idx + 1);
+                        document.getElementById('d-ans').innerText = data.ans;
+                        document.getElementById('d-ans').style.display = data.reveal ? 'block' : 'none';
+                    }
+                });
             } else {
-                alert("الكود غير صحيح أو الشاشة غير مفتوحة!");
+                document.getElementById('s-admin').classList.add('active');
+                sync(true);
             }
-        }
+        };
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function updateAdminUI() {
-            document.getElementById('a-idx').innerText = idx + 1;
-            document.getElementById('a-ans').innerText = quizData[idx].ans;
-            sendCmd('update');
-        }
-
-        function sendCmd(type) {
-            bc.postMessage({
-                type: type,
-                img: quizData[idx].img,
-                ans: quizData[idx].ans,
-                p1: p1, p2: p2, idx: idx
+        function sync(resetReveal = false) {
+            update(quizRef, {
+                img: quizData[curIdx].img,
+                ans: quizData[curIdx].ans,
+                p1: p1, p2: p2, idx: curIdx,
+                t1n: document.getElementById('t1Name').value,
+                t2n: document.getElementById('t2Name').value,
+                reveal: resetReveal ? false : undefined
             });
+            document.getElementById('a-hint').innerText = "الإجابة: " + quizData[curIdx].ans;
         }
 
-        function modPoint(t, v) {
-            if(t===1) p1 = Math.max(0, p1+v); else p2 = Math.max(0, p2+v);
-            sendCmd('update');
-        }
-
-        function next() {
-            idx++;
-            if(idx < quizData.length) updateAdminUI();
-            else alert("انتهت جميع الأسئلة!");
-        }
+        document.getElementById('t1Name').oninput = () => sync();
+        document.getElementById('t2Name').oninput = () => sync();
+        document.getElementById('btnReveal').onclick = () => update(quizRef, { reveal: true });
+        document.getElementById('btnNext').onclick = () => { if(curIdx < quizData.length-1) { curIdx++; sync(true); } };
+        document.getElementById('p1Plus').onclick = () => { p1++; sync(); };
+        document.getElementById('p1Minus').onclick = () => { if(p1>0) p1--; sync(); };
+        document.getElementById('p2Plus').onclick = () => { p2++; sync(); };
+        document.getElementById('p2Minus').onclick = () => { if(p2>0) p2--; sync(); };
     </script>
 </body>
 </html>
